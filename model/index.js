@@ -74,10 +74,29 @@ async function addContact(name, email, phone) {
     console.log(err.message);
   }
 }
+const updateContact = async (contactId, name, email, phone) => {
+  try {
+    const listContact = await fs.readFile(contactsPath, "utf8");
+    const contact = JSON.parse(listContact);
+    contact.map((contact, index) => {
+      if (contact.id.toString() === contactId) {
+        // contact[index] =
+        return { id: contactId, name, email, phone };
+      }
+      console.log(contactsList);
+      return contact;
+    });
+    const contactsList = JSON.stringify(contact, null, "\t");
+    await writeToJson(contactsList);
+  } catch (err) {
+    console.log(err.message);
+  }
+};
 
 module.exports = {
   listContacts,
   getContactById,
   removeContact,
   addContact,
+  updateContact,
 };
