@@ -92,11 +92,36 @@ const updateContact = async (contactId, name, email, phone) => {
     console.log(err.message);
   }
 };
-
+const changeContact = async (contactId, name, email, phone) => {
+  // console.log(contactId, name, email, phone);
+  try {
+    const listContact = await fs.readFile(contactsPath, "utf8");
+    const contact = JSON.parse(listContact);
+    contact.map((cont) => {
+      if (cont.id.toString() === contactId) {
+        if (name) {
+          cont.name = name;
+        }
+        if (email) {
+          cont.email = email;
+        }
+        if (phone) {
+          cont.phone = phone;
+        }
+      }
+      return cont;
+    });
+    const contactsList = JSON.stringify(contact, null, "\t");
+    await writeToJson(contactsList);
+  } catch (err) {
+    console.log(err.message);
+  }
+};
 module.exports = {
   listContacts,
   getContactById,
   removeContact,
   addContact,
   updateContact,
+  changeContact,
 };
