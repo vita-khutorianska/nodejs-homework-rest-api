@@ -25,6 +25,6 @@ const patchValidation = (req, res, next) => {
     email: Joi.string()
       .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
       .optional(),
-  });
+  }).min(1);
   checkValidation(schema, req, res, next);
 };
