@@ -1,10 +1,18 @@
 const mongoose = require("mongoose");
+
 const connectMongo = async () => {
-  mongoose.connect("mongodb://localhost:3030", {
-    useNewUrlParser: true,
-  });
+  try {
+    return (
+      mongoose.connect(process.env.DB_HOST, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+      }),
+      console.log("Database connection successful")
+    );
+  } catch (err) {
+    console.log(`Error in DB connection ${err}`);
+    process.exit(1);
+  }
 };
 
-module.export = {
-  connectMongo,
-};
+module.exports = { connectMongo };
