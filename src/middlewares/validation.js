@@ -1,7 +1,6 @@
 const Joi = require("joi");
 
 const checkValidation = (schema, req, res, next) => {
-  console.log();
   const validationResult = schema.validate(req.body);
   if (validationResult.error) {
     return res.status(400).json({ status: validationResult.error.message });
@@ -19,16 +18,23 @@ const validationData = (req, res, next) => {
   });
   checkValidation(schema, req, res, next);
 };
-const patchValidation = (req, res, next) => {
-  // console.log("patchValidation");
+const updateContactValidation = (req, res, next) => {
   const schema = Joi.object({
-    name: Joi.string().min(3).max(30).optional(),
-    phone: Joi.string().min(7).max(10).optional(),
-    email: Joi.string()
-      .email({ minDomainSegments: 2, tlds: { allow: ["com", "net"] } })
-      .optional(),
+    name: Joi.string().min(3).max(30),
+    email: Joi.string().email({ minDomainSegments: 2 }),
+    phone: Joi.string().min(7).max(14),
+  }).min(1);
+  checkValidation(schema, req, res, next);
+};
+const updateStatusContactValidation = (req, res, next) => {
+  const schema = Joi.object({
+    favorite: Joi.boolean().required(),
   });
   checkValidation(schema, req, res, next);
 };
 
-module.exports = { validationData, patchValidation };
+module.exports = {
+  validationData,
+  updateContactValidation,
+  updateStatusContactValidation,
+};

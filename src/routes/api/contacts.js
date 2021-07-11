@@ -3,24 +3,21 @@ const router = express.Router();
 
 const {
   getContactsController,
-  getContactIdController,
-  postContactsController,
+  getContactByIdController,
+  addContactController,
   deleteContactController,
   updateContactController,
   updateStatusContactController,
 } = require("../../controllers/controllers");
+const {
+  validationData,
+  updateContactValidation,
+  updateStatusContactValidation,
+} = require("../../middlewares/validation");
 
-// const {
-//   validationData,
-//   updateContactValidation,
-//   updateStatusContactValidation,
-// } = require("../../");
-// const { authMiddleware } = require("../../middlewares/authMiddlware");
-
-router.use(authMiddleware);
 router.get("/", getContactsController);
-router.get("/:id", getContactIdController);
-router.post("/", validationData, postContactsController);
+router.get("/:id", getContactByIdController);
+router.post("/", validationData, addContactController);
 router.delete("/:id", deleteContactController);
 router.put("/:id", updateContactValidation, updateContactController);
 router.patch(
@@ -29,5 +26,4 @@ router.patch(
   updateStatusContactController
 );
 
-module.exports = router;
 module.exports = router;

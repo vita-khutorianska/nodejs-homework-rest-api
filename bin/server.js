@@ -1,17 +1,17 @@
-require('dotenv').config()
-const app = require('../app')
-const { connectMongo } = require('../src/db/connection.js')
+const app = require("../app");
+const { connectMongo } = require("../src/db/connections");
+require("dotenv").config();
 
-const PORT = process.env.PORT || 3000
+const PORT = process.env.PORT || 3000;
 
 const starts = async () => {
   try {
-    await connectMongo()
+    await connectMongo();
     app.listen(PORT, () => {
-      console.log(`Server running. Use our API on port: ${PORT}`)
-    })
+      console.log(`Server running. Use our API on port: ${PORT}`);
+    });
   } catch (error) {
-    console.log(`Error on server start ${error.message}`)
+    console.log(`Error on server start ${error.message}`);
   }
-}
-starts()
+};
+starts();
