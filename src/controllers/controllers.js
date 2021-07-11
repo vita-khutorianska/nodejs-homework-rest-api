@@ -92,5 +92,3 @@ module.exports = {
   updateContactController,
   updateStatusContactController,
 };
-
-module.exports = { getContactControler };
