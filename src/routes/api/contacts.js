@@ -17,14 +17,18 @@ const {
 } = require("../../middlewares/validation");
 
 router.get("/", asyncWrapper(getContactsController));
-router.get("/:id", getContactByIdController);
-router.post("/", validationData, addContactController);
-router.delete("/:id", deleteContactController);
-router.put("/:id", updateContactValidation, updateContactController);
+router.get("/:id", asyncWrapper(getContactByIdController));
+router.post("/", validationData, asyncWrapper(addContactController));
+router.delete("/:id", asyncWrapper(deleteContactController));
+router.put(
+  "/:id",
+  updateContactValidation,
+  asyncWrapper(updateContactController)
+);
 router.patch(
   "/:id/favorite",
   updateStatusContactValidation,
-  updateStatusContactController
+  asyncWrapper(updateStatusContactController)
 );
 
 module.exports = router;

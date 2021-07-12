@@ -9,69 +9,51 @@ const {
 
 const getContactsController = async (req, res, next) => {
   const allContacts = await getContact();
-  console.log("allContacts", allContacts);
   res.status(200).json(allContacts);
 };
 
 const getContactByIdController = async (req, res, next) => {
-  const { contactId } = req.params;
-  try {
-    const contact = await getContactById(contactId);
-    res.status(200).json(contact);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
+  const { id } = req.params;
+  const contact = await getContactById(id);
+  res.status(200).json(contact);
 };
 const deleteContactController = async (req, res, next) => {
-  const { contactId } = req.params;
-  try {
-    await deleteContact(contactId);
-    res.status(200).json({
-      message: `Contact with ID ${contactId} successfully deleted`,
-    });
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
+  const { id } = req.params;
+  await deleteContact(id);
+  res.status(200).json({
+    message: `Contact with ID ${id} successfully deleted`,
+  });
 };
 
 const addContactController = async (req, res, next) => {
   const formData = req.body;
-  try {
-    const newContact = await addContact(formData);
-    res.status(200).json({
-      message: `Contact ${newContact._id} successfully added`,
-    });
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
+  const newContact = await addContact(formData);
+  res.status(200).json({
+    message: `Contact ${newContact._id} successfully added`,
+  });
 };
 
 const updateContactController = async (req, res, next) => {
   const formData = req.body;
-  const { contactId } = req.params;
-  try {
-    await updateContact(contactId, formData);
-    res.status(200).json({
-      message: `Contact with ID '${contactId}' successfully updated`,
-    });
-  } catch (error) {
-    res.status(400).json({
-      message: `Contact with ID '${contactId}' not found`,
-    });
-  }
+  const { id } = req.params;
+
+  await updateContact(id, formData);
+  res.status(200).json({
+    message: `Contact with ID '${id}' successfully updated`,
+  });
 };
 
 const updateStatusContactController = async (req, res, next) => {
-  const newStatus = req.body;
-  const { contactId } = req.params;
-  try {
-    await updateStatusContact(contactId, newStatus);
-    res.status(200).json(await getContactById(contactId));
-  } catch (error) {
-    res.status(400).json({
-      message: error.message,
-    });
+  const { id } = req.params;
+  const { favorite } = req.body;
+  const client = await updateStatusContact(id, { favorite });
+  if (client) {
+    return res.status(200).json(`client with ${id} update favorite status`);
   }
+  return res.status(404).json({
+    message: `Not found contact id: ${id}`,
+    data: "Not Found",
+  });
 };
 
 module.exports = {

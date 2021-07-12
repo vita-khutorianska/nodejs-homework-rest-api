@@ -4,12 +4,12 @@ const getContact = async () => {
   return await Contact.find();
 };
 
-const getContactById = async (contactId) => {
-  return await Contact.findById(contactId);
+const getContactById = async (id) => {
+  return await Contact.findById(id);
 };
 
-const deleteContact = async (contactId) => {
-  await Contact.findByIdAndRemove(contactId);
+const deleteContact = async (id) => {
+  await Contact.findByIdAndRemove(id);
 };
 
 const addContact = async ({ name, email, phone }) => {
@@ -22,21 +22,23 @@ const addContact = async ({ name, email, phone }) => {
   return newContact;
 };
 
-const updateContact = async (contactId, { name, email, phone }) => {
-  const contact = await getContactById(contactId);
+const updateContact = async (id, { name, email, phone }) => {
+  const contact = await getContactById(id);
   const newContact = {
     name: name || contact.name,
     email: email || contact.email,
     phone: phone || contact.phone,
   };
-  await Contact.findByIdAndUpdate(contactId, { $set: newContact });
+  await Contact.findByIdAndUpdate(id, { $set: newContact });
 };
 
-const updateStatusContact = async (contactId, newStatus) => {
-  const contact = await getContactById(contactId);
-  await Contact.findByIdAndUpdate(contactId, {
-    $set: (contact.favorite = newStatus),
-  });
+const updateStatusContact = async (id, { favorite }) => {
+  const updateContact = await Contact.findByIdAndUpdate(
+    { _id: id },
+    { $set: { favorite } },
+    { new: true }
+  );
+  return updateContact;
 };
 
 module.exports = {
