@@ -1,7 +1,7 @@
 const { Contact } = require("../db/contactModule");
 
 const getContact = async () => {
-  return await Contact.find({});
+  return await Contact.find();
 };
 
 const getContactById = async (contactId) => {

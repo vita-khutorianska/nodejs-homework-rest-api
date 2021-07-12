@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const { asyncWrapper } = require("../../helpers/apiHelpers");
 
 const {
   getContactsController,
@@ -15,7 +16,7 @@ const {
   updateStatusContactValidation,
 } = require("../../middlewares/validation");
 
-router.get("/", getContactsController);
+router.get("/", asyncWrapper(getContactsController));
 router.get("/:id", getContactByIdController);
 router.post("/", validationData, addContactController);
 router.delete("/:id", deleteContactController);
