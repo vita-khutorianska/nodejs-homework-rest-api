@@ -1,4 +1,4 @@
-onst {
+const {
   login,
   registration,
   logout,
