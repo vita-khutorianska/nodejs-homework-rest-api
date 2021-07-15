@@ -1,3 +1,7 @@
+const { NotAuthorized } = require('../helpers/errors')
+const jwt = require('jsonwebtoken')
+const { User } = require('../db/userModel')
+
 const authMiddleware = async (req, res, next) => {
   try {
     const [, token] = req.headers.authorization.split(' ')
@@ -15,12 +19,16 @@ const authMiddleware = async (req, res, next) => {
     if (userExist.token !== token) {
       next(new NotAuthorized('Not authorized'))
     }
-    console.log('req.user ', req.user)
     req.user = userExist
+    console.log('req.user ', req.user)
     req.token = token
     next()
   } catch (err) {
     console.log('err', err)
     next(new NotAuthorized('Invalid token'))
   }
+}
+
+module.exports = {
+  authMiddleware
 }
