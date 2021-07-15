@@ -1,45 +1,44 @@
-const { Contact } = require("../db/contactModule");
+const { Contact } = require('../db/contactModel')
+const { NotAuthorized } = require('../helpers/errors')
 
-const getContact = async () => {
-  return await Contact.find();
-};
-
-const getContactById = async (id) => {
-  return await Contact.findById(id);
-};
-
-const deleteContact = async (id) => {
-  await Contact.findByIdAndRemove(id);
-};
-
-const addContact = async ({ name, email, phone }) => {
-  const newContact = new Contact({
+const getContact = async (userId) => {
+  return await Contact.find({ owner: userId }).select({ __v: 0 })
+}
+const getContactById = async (userId, id) => {
+  if (!userId) {
+    throw new NotAuthorized('Not authorized')
+  }
+  return await Contact.findById({ owner: userId, _id: id })
+}
+const addContact = async ({ name, email, phone, userId }) => {
+  const newClient = new Contact({
     name,
     email,
     phone,
-  });
-  await newContact.save();
-  return newContact;
-};
+    owner: userId
+  })
+  return await newClient.save()
+}
 
-const updateContact = async (id, { name, email, phone }) => {
-  const contact = await getContactById(id);
-  const newContact = {
-    name: name || contact.name,
-    email: email || contact.email,
-    phone: phone || contact.phone,
-  };
-  await Contact.findByIdAndUpdate(id, { $set: newContact });
-};
+const updateContact = async (id, { name, email, phone }, userId) => {
+  const client = await Contact.findByIdAndUpdate(
+    { _id: id, owner: userId },
+    { $set: { name, email, phone } }
+  )
+  return client
+}
 
-const updateStatusContact = async (id, { favorite }) => {
-  const updateContact = await Contact.findByIdAndUpdate(
-    { _id: id },
+const updateStatusContact = async (id, userId, { favorite }) => {
+  const updateClient = await Contact.findByIdAndUpdate(
+    { _id: id, owner: userId },
     { $set: { favorite } },
     { new: true }
-  );
-  return updateContact;
-};
+  )
+  return updateClient
+}
+const deleteContact = async (id, userId) => {
+  return await Contact.findByIdAndRemove({ _id: id, owner: userId })
+}
 
 module.exports = {
   getContact,
@@ -47,5 +46,5 @@ module.exports = {
   deleteContact,
   addContact,
   updateContact,
-  updateStatusContact,
-};
+  updateStatusContact
+}
