@@ -19,7 +19,7 @@ const getContactsController = async (req, res, next) => {
 const getContactByIdController = async (req, res, next) => {
   const { id } = req.params
   const { _id: userId } = req.user
-  console.log('userId', userId)
+  // console.log('userId', userId)
   try {
     const client = await getContactById(id, userId)
     if (!client) {
