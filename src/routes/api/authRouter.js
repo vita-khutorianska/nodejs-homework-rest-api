@@ -13,7 +13,7 @@ const {
   logoutController,
   getCurrentUserController,
   updateSubscriptionController
-} = require('../../controllers/controllers')
+} = require('../../controllers/userControllers')
 
 router.post(
   '/registration',

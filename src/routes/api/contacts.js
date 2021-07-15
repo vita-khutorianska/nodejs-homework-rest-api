@@ -9,7 +9,7 @@ const {
   deleteContactController,
   updateContactController,
   updateStatusContactController
-} = require('../../controllers/controllers')
+} = require('../../controllers/contactsController')
 const {
   validationData,
   updateContactValidation,
