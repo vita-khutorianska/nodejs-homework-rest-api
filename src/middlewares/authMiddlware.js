@@ -1,7 +1,3 @@
-const { NotAuthorized } = require('../helpers/errors')
-const jwt = require('jsonwebtoken')
-const { User } = require('../db/userModel')
-
 const authMiddleware = async (req, res, next) => {
   try {
     const [, token] = req.headers.authorization.split(' ')
@@ -27,8 +23,4 @@ const authMiddleware = async (req, res, next) => {
     console.log('err', err)
     next(new NotAuthorized('Invalid token'))
   }
-}
-
-module.exports = {
-  authMiddleware
 }

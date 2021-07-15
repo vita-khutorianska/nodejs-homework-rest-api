@@ -21,7 +21,6 @@ const registration = async ({ email, password }) => {
 }
 const login = async ({ email, password }) => {
   const user = await User.findOne({ email })
-
   if (!user) {
     throw new NotAuthorized('Email  is wrong')
   }

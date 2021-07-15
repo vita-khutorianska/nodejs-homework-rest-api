@@ -1,4 +1,4 @@
-const { Contact } = require('../db/contactModule')
+const { Contact } = require('../db/contactModel')
 const { NotAuthorized } = require('../helpers/errors')
 
 const getContact = async (userId) => {
