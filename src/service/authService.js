@@ -5,24 +5,33 @@ const fs = require('fs').promises
 const jimp = require('jimp')
 
 const { User } = require('../db/userModel')
-const { NotAuthorized, RegistrationConflictError } = require('../helpers/errors')
+const {
+  NotAuthorized,
+  RegistrationConflictError
+} = require('../helpers/errors')
 
 const registration = async ({ email, password }) => {
   const existEmail = await User.findOne({ email })
-  if (existEmail) { throw new RegistrationConflictError('Email  is already used') }
+  if (existEmail) {
+    throw new RegistrationConflictError('Email  is already used')
+  }
   const user = new User({
     email,
     password
   })
   const newUser = await user.save()
-  return { email: newUser.email, subscription: newUser.subscription, avatarURL: newUser.avatarURL }
+  return {
+    email: newUser.email,
+    subscription: newUser.subscription,
+    avatarURL: newUser.avatarURL
+  }
 }
 const login = async ({ email, password }) => {
   const user = await User.findOne({ email })
   if (!user) {
     throw new NotAuthorized('Email  is wrong')
   }
-  if (!await bcrypt.compare(password, user.password)) {
+  if (!(await bcrypt.compare(password, user.password))) {
     throw new NotAuthorized('Password is wrong')
   }
   const token = jwt.sign(
@@ -52,9 +61,7 @@ const logout = async ({ userId, token }) => {
   }
 }
 const getCurrentUser = async ({ userId, token }) => {
-  const currentUser = await User.findOne(
-    { _id: userId, token },
-  )
+  const currentUser = await User.findOne({ _id: userId, token })
   return currentUser
 }
 const updateSubscription = async ({ token, subscription }, userId) => {
@@ -63,14 +70,16 @@ const updateSubscription = async ({ token, subscription }, userId) => {
     { $set: { subscription } },
     { new: true }
   )
-  if (!updateUserSubscription) { throw new NotAuthorized('Not authorized') }
+  if (!updateUserSubscription) {
+    throw new NotAuthorized('Not authorized')
+  }
   return updateUserSubscription
 }
 const updateAvatar = async ({ userId, file }) => {
   const FILE_DIR = path.join(`./tmp/${file.filename}`)
-  console.log('FILE_DIR', FILE_DIR)
+
   const AVATARS_DIR = path.join('./public/avatars')
-  console.log('AVATARS_DIR', AVATARS_DIR)
+
   const [, extension] = file.originalname.split('.')
   const newImageName = `${Date.now()}.${extension}`
   if (file) {
@@ -86,7 +95,11 @@ const updateAvatar = async ({ userId, file }) => {
     await fs.rename(FILE_DIR, path.join(AVATARS_DIR, newImageName))
   }
   const newFilePath = `/api/download/${newImageName}`
-  const newA = await User.findOneAndUpdate({ _id: userId }, { $set: { avatarURL: newFilePath } }, { new: true })
+  const newA = await User.findOneAndUpdate(
+    { _id: userId },
+    { $set: { avatarURL: newFilePath } },
+    { new: true }
+  )
   return newA.avatarURL
 }
 module.exports = {
@@ -97,4 +110,3 @@ module.exports = {
   updateSubscription,
   updateAvatar
 }
-
