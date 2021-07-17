@@ -1,4 +1,4 @@
-onst { NotAuthorized } = require('../helpers/errors')
+const { NotAuthorized } = require('../helpers/errors')
 const jwt = require('jsonwebtoken')
 const { User } = require('../db/userModel')
 
