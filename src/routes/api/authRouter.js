@@ -6,13 +6,14 @@ const {
 } = require('../../middlewares/validation')
 const { asyncWrapper } = require('../../helpers/apiHelpers')
 const { authMiddleware } = require('../../middlewares/authMiddlware')
-
+const { uploadMiddleware } = require('../../helpers/multer')
 const {
   registrationController,
   loginController,
   logoutController,
   getCurrentUserController,
-  updateSubscriptionController
+  updateSubscriptionController,
+  avatarsController
 } = require('../../controllers/userController')
 
 router.post(
@@ -28,6 +29,12 @@ router.patch(
   authMiddleware,
   subscriptionValidation,
   asyncWrapper(updateSubscriptionController)
+)
+router.patch(
+  '/avatars',
+  authMiddleware,
+  uploadMiddleware.single('avatar'),
+  asyncWrapper(avatarsController)
 )
 
 module.exports = router
