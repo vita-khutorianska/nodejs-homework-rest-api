@@ -50,6 +50,7 @@ const avatarsController = async (req, res, next) => {
   })
   res.status(200).json({
     Status: 'OK',
+    ContentType: 'application/json',
     avatarURL: newPathAvatar
   })
 }
