@@ -26,6 +26,14 @@ const userSchema = new mongoose.Schema({
     default: function () {
       return gravatar.url(this.email, { s: '250' }, true)
     }
+  },
+  verify: {
+    type: Boolean,
+    default: false
+  },
+  verifyToken: {
+    type: String,
+    required: [true, 'Verify token is required']
   }
 })
 userSchema.pre('save', async function () {
@@ -34,5 +42,5 @@ userSchema.pre('save', async function () {
   }
 })
 
-const User = mongoose.model('user', userSchema)
+const User = mongoose.model('User', userSchema)
 module.exports = { User }
