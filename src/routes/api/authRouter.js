@@ -13,7 +13,9 @@ const {
   logoutController,
   getCurrentUserController,
   updateSubscriptionController,
-  avatarsController
+  avatarsController,
+  userVerificationController,
+  userVerificationResendController
 } = require('../../controllers/userController')
 
 router.post(
@@ -30,6 +32,12 @@ router.patch(
   subscriptionValidation,
   asyncWrapper(updateSubscriptionController)
 )
+router.get(
+  '/verify/:verificationToken',
+  asyncWrapper(userVerificationController)
+)
+router.post('/verify', asyncWrapper(userVerificationResendController))
+
 router.patch(
   '/avatars',
   authMiddleware,
