@@ -116,15 +116,15 @@ const userVerificationResend = async ({ email }) => {
     port: 587,
     secure: false, // true for 465, false for other ports
     auth: {
-      user: 'testgoit971@gmail.com',
-      pass: '123456_test@'
+      user: 'testnode1988@gmail.com',
+      pass: '1q2w3e4r5t6y_7u'
     },
     tls: {
       rejectUnauthorized: false
     }
   })
   const info = await transporter.sendMail({
-    from: '"Fred  👻" <testgoit971@gmail.com>',
+    from: '"Vita" <testnode1988@gmail.com>',
     to: userVerified.email,
     subject: 'Sender',
     text: `Please  click on link:<a href = "http://localhost:3030/api/auth/verify/${verificationToken}"> for registration</a>`,
